@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 namespace KL.Domain
 {
     public class ClientScheduleService

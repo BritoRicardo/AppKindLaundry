@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using KL.WebAPI.Data;
-using KL.WebAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-
+using KL.Repository;
+using KL.Domain;
 namespace KL.WebAPI.Controllers
 {
     [ApiController]
