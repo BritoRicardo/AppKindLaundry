@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System;
 
-namespace KL.WebAPI.Models
+namespace KL.Domain
 {
     public class Clients {
        [Key]      
@@ -43,10 +43,11 @@ namespace KL.WebAPI.Models
        public string City {get; set;}
 
        [Required(ErrorMessage = "Required field")]
-       public string FedUnit {get; set;}
+       public string AlphaCode {get; set;}
 
        [Required(ErrorMessage = "Required field")]     
        public DateTime UpdateDate { get; set; }
        public List<ScheduleService> SchedulesServices { get; set; }
+       public List<ClientScheduleService> ClientScheduleServices { get; set; }
    }
 }

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace KL.WebAPI.Models
+namespace KL.Domain
 {
     public class Provinces
     {
