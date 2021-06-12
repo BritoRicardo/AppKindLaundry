@@ -7,7 +7,7 @@ using KL.Domain;
 namespace KL.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]   
+    [Route("api/client")]   
     public class ClientsController : ControllerBase
     {
         //Dependency Injected in the Startup.cs

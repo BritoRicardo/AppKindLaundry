@@ -10,20 +10,20 @@ namespace KL.Domain
 
      [Required(ErrorMessage = "Required field")]
      [Range(1, int.MaxValue, ErrorMessage = "O preço deve ser maior que zero")]
-     public decimal Price {get; set;}
+     public string Price {get; set;}
      
 
      [Required(ErrorMessage = "Required field")]
-     public DateTime ContractDate {get; set;}
+     public string ContractDate {get; set;}
 
 
      [Required(ErrorMessage = "Required field")]
-     public DateTime DeliveryDate {get; set;}
+     public string DeliveryDate {get; set;}
 
      [Required(ErrorMessage = "Required field")]     
-     public DateTime UpdateDate { get; set; }
+     public string UpdateDate { get; set; }
 
      public int ClientsId {get; set;}   
-     public Clients Clients {get; set;}
+     public Clients Clients {get; }
     }
 }

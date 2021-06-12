@@ -46,8 +46,8 @@ namespace KL.Domain
        public string AlphaCode {get; set;}
 
        [Required(ErrorMessage = "Required field")]     
-       public DateTime UpdateDate { get; set; }
-       public List<ScheduleService> SchedulesServices { get; set; }
-       public List<ClientScheduleService> ClientScheduleServices { get; set; }
+       public string UpdateDate { get; set; }
+       public List<ScheduleService> SchedulesServices { get; }
+       public List<ClientScheduleService> ClientScheduleServices { get; }
    }
 }
