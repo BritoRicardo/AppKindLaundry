@@ -29,6 +29,10 @@ namespace KL.WebAPI
             services.AddDbContext<DataContext>(
                 x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection"))
             );
+            
+            //Dependency Injection
+            services.AddScoped<IKLRepository, KLRepository>();
+
             services.AddControllers();
             services.AddCors();
         }
