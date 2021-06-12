@@ -10,8 +10,10 @@ namespace KL.Repository
         public DataContext _context { get; }
         public KLRepository(DataContext context)
         {
-            this._context = context;
+            _context = context;
 
+            //Defined NoTracking for all
+            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
         //GENERAL
@@ -48,7 +50,10 @@ namespace KL.Repository
                     .Include(cs => cs.ClientScheduleServices)
                     .ThenInclude(s => s.ScheduleService);
             }
-            query = query.OrderBy(c => c.Name);
+
+            // using NoTracking
+            query = query.AsNoTracking()
+                    .OrderBy(c => c.Name);
 
             return await query.ToArrayAsync();
         }       
@@ -64,7 +69,8 @@ namespace KL.Repository
                     .Include(cs => cs.ClientScheduleServices)
                     .ThenInclude(s => s.ScheduleService);
             }
-            query = query.OrderBy(c => c.Name)
+            query = query.AsNoTracking()
+                        .OrderBy(c => c.Name)
                         .Where(c => c.Name.ToLower().Contains(name.ToLower()));
 
             return await query.ToArrayAsync();
@@ -81,7 +87,8 @@ namespace KL.Repository
                     .Include(cs => cs.ClientScheduleServices)
                     .ThenInclude(s => s.ScheduleService);
             }
-            query = query.OrderBy(c => c.Name)
+            query = query.AsNoTracking()
+                        .OrderBy(c => c.Name)
                         .Where(c => c.Id == ClientId);
 
             return await query.FirstOrDefaultAsync();
