@@ -1,4 +1,5 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Customers } from '../_models/Customers';
 import { CustomersService } from '../_services/Customers.service';
@@ -13,6 +14,7 @@ export class CustomersComponent implements OnInit {
   CustomersFiltered: Customers[] = [];
   Customers: Customers[] = [];
   modalRef: BsModalRef;
+  registerForm: FormGroup;
 
   _filtered: string = '';
   get filtered() {
@@ -27,7 +29,19 @@ export class CustomersComponent implements OnInit {
     private CustomersService: CustomersService
    ,private modalService: BsModalService
    ) { 
-    this.modalRef = new BsModalRef();
+    this.modalRef = new BsModalRef();    
+    this.registerForm = new FormGroup({
+      name: new FormControl,
+      birthDate: new FormControl,
+      phoneNumber1: new FormControl,
+      phoneNumber2: new FormControl,
+      email: new FormControl,
+      adress: new FormControl,
+      number: new FormControl,
+      neighborhood: new FormControl,
+      city: new FormControl,
+      alphaCode: new FormControl
+    });
   } 
 
   ngOnInit() {
@@ -36,6 +50,25 @@ export class CustomersComponent implements OnInit {
 
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
+  }
+
+  validation() {
+    this.registerForm = new FormGroup({
+      name: new FormControl,
+      birthDate: new FormControl,
+      phoneNumber1: new FormControl,
+      phoneNumber2: new FormControl,
+      email: new FormControl,
+      adress: new FormControl,
+      number: new FormControl,
+      neighborhood: new FormControl,
+      city: new FormControl,
+      alphaCode: new FormControl
+    });
+  }
+
+  salvarAlteracao() {
+
   }
 
   toFilterCustomers(filterBy: string): any {

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common'; 
 import { HttpClientModule } from '@angular/common/http';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -27,7 +27,8 @@ import { DateTimeFormatPipe } from './_helpers/DateTimeFormat.pipe';
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule    
+    FormsModule,
+    ReactiveFormsModule   
   ],
   declarations: [		
     AppComponent,
