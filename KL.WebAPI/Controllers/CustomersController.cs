@@ -7,13 +7,13 @@ using KL.Domain;
 namespace KL.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/client")]   
-    public class ClientsController : ControllerBase
+    [Route("api/customers")]   
+    public class CustomersController : ControllerBase
     {
         //Dependency Injected in the Startup.cs
         public IKLRepository _repo { get; }
         
-        public ClientsController(IKLRepository repo)
+        public CustomersController(IKLRepository repo)
         {
             _repo = repo;
 
@@ -24,7 +24,7 @@ namespace KL.WebAPI.Controllers
     {
         try
         {
-            var results = await _repo.GetAllClients(true);
+            var results = await _repo.GetAllCustomers(true);
 
             return Ok(results);
         }
@@ -34,12 +34,12 @@ namespace KL.WebAPI.Controllers
         }
     }
 
-    [HttpGet ("{ClientId}")]
-    public async Task<IActionResult> Get(int ClientId)
+    [HttpGet ("{CustomersId}")]
+    public async Task<IActionResult> Get(int CustomersId)
     {
         try
         {
-            var results = await _repo.GetClientById(ClientId, true);
+            var results = await _repo.GetClientById(CustomersId, true);
 
             return Ok(results);
         }
@@ -54,7 +54,7 @@ namespace KL.WebAPI.Controllers
     {
         try
         {
-            var results = await _repo.GetAllClientsByName(name, true);
+            var results = await _repo.GetAllCustomersByName(name, true);
 
             return Ok(results);
         }
@@ -65,7 +65,7 @@ namespace KL.WebAPI.Controllers
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post(Clients model)
+    public async Task<IActionResult> Post(Customers model)
     {
         try
         {
@@ -73,8 +73,8 @@ namespace KL.WebAPI.Controllers
 
             if (await _repo.SaveChangesAsync())
             {
-                //If saved call rote getbyId
-                return Created($"/api/client/{model.Id}", model);
+                //If saved call rote getbyId using template string
+                return Created($"/api/customers/{model.Id}", model);
             }
         }
         catch (System.Exception)
@@ -86,7 +86,7 @@ namespace KL.WebAPI.Controllers
     }  
 
     [HttpPut]
-    public async Task<IActionResult> Put(int ClientId, Clients model)
+    public async Task<IActionResult> Put(int ClientId, Customers model)
     {
         try
         {
@@ -99,8 +99,8 @@ namespace KL.WebAPI.Controllers
 
             if (await _repo.SaveChangesAsync())
             {
-                //If saved call rote getbyId
-                return Created($"/api/client/{model.Id}", model);
+                //If saved call rote getbyId using template string
+                return Created($"/api/customers/{model.Id}", model);
             }
         }
         catch (System.Exception)

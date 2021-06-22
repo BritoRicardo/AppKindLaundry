@@ -12,10 +12,10 @@ namespace KL.Repository
          Task<bool> SaveChangesAsync();
 
          
-         //CLIENTS
-         Task<Clients[]> GetAllClients(bool includeScheduleService);
-         Task<Clients[]> GetAllClientsByName(string name, bool includeScheduleService);
-         Task<Clients> GetClientById(int ClientId, bool includeScheduleService);
+         //Customers
+         Task<Customers[]> GetAllCustomers(bool includeScheduleService);
+         Task<Customers[]> GetAllCustomersByName(string name, bool includeScheduleService);
+         Task<Customers> GetClientById(int ClientId, bool includeScheduleService);
 
          //PROVINCES
          Task<Provinces[]> GetAllProvinces();

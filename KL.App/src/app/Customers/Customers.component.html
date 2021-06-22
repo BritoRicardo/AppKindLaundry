@@ -1,0 +1,67 @@
+
+<div class="form-inline">
+  <div class="form-group md-2">
+   <label class="mr-2">Filtro:</label> <input type="text" class="form-control mr-2" placeholder="search" [(ngModel)] = "filtered"> 
+  </div>
+</div>
+
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>E-mail</th>
+        <th>Birth Date</th>
+        <th>Adress</th>
+        <th>Number</th>
+        <th>Neighborhood</th>
+        <th>City</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let customer of CustomersFiltered">
+        <td>{{customer.id}}</td>
+        <td>{{customer.name}}</td>
+        <td>{{customer.email}}</td>
+        <td>{{customer.birthDate | DateTimeFormatPipe}}</td>
+        <td>{{customer.adress}}</td>
+        <td>{{customer.number}}</td>
+        <td>{{customer.neighborhood}}</td>
+        <td>{{customer.city}}</td>         
+        <td>
+          <div class="btn-group">
+            <button class="btn btn-sm btn-primary" tooltip="Editar" (click)="openModal(template)">
+              <i class="fa fa-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-danger" tooltip="Excluir">
+              <i class="fa fa-eraser"></i>
+            </button>
+          </div> 
+         </td>  
+      </tr>
+    </tbody>
+   <!--  <tfoot>
+      <tr>
+        <td colspan="7" class="text-center">
+          <h3>
+            No one customer finded!
+          </h3>
+        </td>
+      </tr>
+    </tfoot> -->
+  </table>
+  <!-- MODAL -->
+  <ng-template #template>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Modal</h4>
+      <button type="button" class="close pull-right" 
+      aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    This is a modal.
+  </div>
+ </ng-template>
+

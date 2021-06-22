@@ -4,7 +4,7 @@ using System;
 
 namespace KL.Domain
 {
-    public class Clients {
+    public class Customers {
        [Key]      
        public int Id {get; set;}
 
@@ -46,8 +46,9 @@ namespace KL.Domain
        public string AlphaCode {get; set;}
 
        [Required(ErrorMessage = "Required field")]     
-       public string UpdateDate { get; set; }
+       public DateTime UpdateDate { get; set; }
+       public DateTime BirthDate { get; set; }
        public List<ScheduleService> SchedulesServices { get; }
-       public List<ClientScheduleService> ClientScheduleServices { get; }
+       public List<CustomerscheduleService> CustomerscheduleServices { get; }
    }
 }

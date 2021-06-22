@@ -37,17 +37,17 @@ namespace KL.Repository
             return (await _context.SaveChangesAsync()) > 0;
         }
 
-        //CLIENTS
+        //Customers
         // Param includeScheduleService is opcional
-        public async Task<Clients[]> GetAllClients(bool includeScheduleService = false)
+        public async Task<Customers[]> GetAllCustomers(bool includeScheduleService = false)
         {
-            IQueryable<Clients> query = _context.Clients;
+            IQueryable<Customers> query = _context.Customers;
 
             if (includeScheduleService)
             {
                 //Integrated with relationship table
                 query = query
-                    .Include(cs => cs.ClientScheduleServices)
+                    .Include(cs => cs.CustomerscheduleServices)
                     .ThenInclude(s => s.ScheduleService);
             }
 
@@ -58,15 +58,15 @@ namespace KL.Repository
             return await query.ToArrayAsync();
         }       
 
-        public async Task<Clients[]> GetAllClientsByName(string name, bool includeScheduleService)
+        public async Task<Customers[]> GetAllCustomersByName(string name, bool includeScheduleService)
         {
-            IQueryable<Clients> query = _context.Clients;
+            IQueryable<Customers> query = _context.Customers;
 
             if (includeScheduleService)
             {
                 //Integrated with relationship table
                 query = query
-                    .Include(cs => cs.ClientScheduleServices)
+                    .Include(cs => cs.CustomerscheduleServices)
                     .ThenInclude(s => s.ScheduleService);
             }
             query = query.AsNoTracking()
@@ -76,15 +76,15 @@ namespace KL.Repository
             return await query.ToArrayAsync();
         }
 
-        public async Task<Clients> GetClientById(int ClientId, bool includeScheduleService = false)
+        public async Task<Customers> GetClientById(int ClientId, bool includeScheduleService = false)
         {
-            IQueryable<Clients> query = _context.Clients;
+            IQueryable<Customers> query = _context.Customers;
 
             if (includeScheduleService)
             {
                 //Integrated with relationship table
                 query = query
-                    .Include(cs => cs.ClientScheduleServices)
+                    .Include(cs => cs.CustomerscheduleServices)
                     .ThenInclude(s => s.ScheduleService);
             }
             query = query.AsNoTracking()
