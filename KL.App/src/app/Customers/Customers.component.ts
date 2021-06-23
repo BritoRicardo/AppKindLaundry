@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Customers } from '../_models/Customers';
 import { CustomersService } from '../_services/Customers.service';
@@ -31,20 +31,26 @@ export class CustomersComponent implements OnInit {
    ) { 
     this.modalRef = new BsModalRef();    
     this.registerForm = new FormGroup({
-      name: new FormControl,
-      birthDate: new FormControl,
-      phoneNumber1: new FormControl,
-      phoneNumber2: new FormControl,
-      email: new FormControl,
-      adress: new FormControl,
-      number: new FormControl,
-      neighborhood: new FormControl,
-      city: new FormControl,
-      alphaCode: new FormControl
+      name: new FormControl('', 
+        [Validators.required, Validators.minLength(3), Validators.maxLength(150)]),
+      birthDate: new FormControl('', Validators.required),
+      phoneNumber1: new FormControl('', Validators.required),
+      phoneNumber2: new FormControl('', Validators.required),
+      email: new FormControl('', 
+        [Validators.required, Validators.email]),
+      adress: new FormControl('', Validators.required),
+      number: new FormControl('', 
+        [Validators.required, Validators.maxLength(10)]),
+      neighborhood: new FormControl('', 
+        [Validators.required, Validators.maxLength(100)]),
+      city: new FormControl('', 
+        [Validators.required, Validators.maxLength(100)]),
+      alphaCode: new FormControl('', Validators.required)
     });
   } 
 
   ngOnInit() {
+    this.validation();
     this.getCustomers();
   }
 
@@ -54,16 +60,20 @@ export class CustomersComponent implements OnInit {
 
   validation() {
     this.registerForm = new FormGroup({
-      name: new FormControl,
-      birthDate: new FormControl,
-      phoneNumber1: new FormControl,
-      phoneNumber2: new FormControl,
-      email: new FormControl,
-      adress: new FormControl,
-      number: new FormControl,
-      neighborhood: new FormControl,
-      city: new FormControl,
-      alphaCode: new FormControl
+      name: new FormControl('', 
+        [Validators.required, Validators.minLength(3), Validators.maxLength(150)]),
+      birthDate: new FormControl('', Validators.required),
+      phoneNumber1: new FormControl('', Validators.required),
+      phoneNumber2: new FormControl('', Validators.required),
+      email: new FormControl('', 
+        [Validators.required, Validators.email]),
+      adress: new FormControl('', Validators.required),
+      number: new FormControl('', 
+        [Validators.required, Validators.maxLength(10)]),
+      neighborhood: new FormControl('', 
+        [Validators.required, Validators.maxLength(100)]),
+      city: new FormControl('', Validators.required),
+      alphaCode: new FormControl('', Validators.required)
     });
   }
 
