@@ -1,14 +1,20 @@
-
-<div class="form-inline">
-  <div class="form-group md-2">
-   <label class="mr-2">Filtro:</label> <input type="text" class="form-control mr-2" placeholder="search" [(ngModel)] = "filtered"> 
-  </div>
+<div class="form-group row">
+  <div class="form-group col-md-4">
+    <label>Filtro:</label>
+    <input type="text" class="form-control" placeholder="search" [(ngModel)] = "filtered"/>
+  </div> 
 </div>
+<div style="margin-left: 1030px;">
+  <button class="btn btn-outline-primary" (click)="openModal(template)">
+    <i class="fa fa-plus-circle"></i>
+    New</button>
+</div>
+ <br>
 
   <table class="table table-striped">
     <thead class="thead-dark">
       <tr>
-        <th>#</th>
+        <th>#</th>  
         <th>Name</th>
         <th>E-mail</th>
         <th>Birth Date</th>
@@ -51,175 +57,191 @@
       </tr>
     </tfoot> -->
   </table>
-  <!-- MODAL -->
-  <ng-template #template>
-    <div class="modal-header">
-      <h4 class="modal-title pull-left">Modal</h4>
-      <button type="button" class="close pull-right" 
-      aria-label="Close" (click)="modalRef.hide()">
-      <span aria-hidden="true">&times;</span>
-    </button>
+  <!-- LARGE MODAL -->
+  <div bsModal #template="bs-modal" class="modal fade" tabindex="-1"
+     role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">New Customers</h4>
+        <button type="button" class="close pull-right" (click)="template.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup] = "registerForm">
+          <div  iv class="form-group row">        
+            <div class="form-group col-md-8">
+              <label>Name</label>
+              <input type="text"
+              class="form-control"
+              [ngClass]="{'is-invalid': registerForm.get('name').errors && registerForm.get('name').touched}"  
+              formControlName="name"
+              placeholder="Insert Name"> 
+              <div *ngIf="registerForm.get('name').hasError('required') && registerForm.get('name').touched"
+              class="invalid-feedback">
+                Name is required
+              </div>
+              <div *ngIf="registerForm.get('name').hasError('minlength') && registerForm.get('name').touched" 
+              class="invalid-feedback">
+                Name must contain at least 3 characters
+              </div>
+              <div *ngIf="registerForm.get('name').hasError('maxlength') && registerForm.get('name').touched" 
+              class="invalid-feedback">
+                Name must contain a maximum of 150 characters
+              </div>
+            </div>
+        
+            <div class="form-group col-md-4">
+              <label>BirthDate</label>
+              <input type="text"       
+               class="form-control"       
+               bsDatepicker
+               [ngClass]="{'is-invalid': registerForm.get('birthDate').errors && registerForm.get('birthDate').touched}"
+               formControlName="birthDate"
+               placeholder="Insert BirthDate">
+              <div class="invalid-feedback">
+                BirthDate is required
+              </div>
+            </div>
+          </div>  
+
+         <div  iv class="form-group row"> 
+          <div class="form-group col-md-8">
+            <label>E-mail</label>
+            <input type="text" 
+             class="form-control" 
+             [ngClass]="{'is-invalid': registerForm.get('email').errors && registerForm.get('email').touched}" 
+             formControlName="email"
+             placeholder="Insert E-mail">
+            <div *ngIf="registerForm.get('email').hasError('required') && registerForm.get('email').touched" 
+            class="invalid-feedback">
+              E-mail is required
+            </div>
+            <div *ngIf="registerForm.get('email').hasError('email') && registerForm.get('email').touched"
+            class="invalid-feedback">
+              E-mail is not valid
+            </div>
+          </div>  
+         </div>  
+
+         <div class="form-group row">
+          <div class="form-group col-md-8">
+            <label>Adress</label>
+            <input type="text" 
+             class="form-control"
+             [ngClass]="{'is-invalid': registerForm.get('adress').errors && registerForm.get('adress').touched}"
+             formControlName="adress"
+             placeholder="Insert Adress">
+            <div class="invalid-feedback">
+              Adress is required
+            </div>
+          </div>
+      
+          <div class="form-group col-md-4">
+            <label>Number</label>
+            <input type="text" 
+             class="form-control"
+             [ngClass]="{'is-invalid': registerForm.get('number').errors && registerForm.get('number').touched}" 
+             formControlName="number"
+             placeholder="Insert Number">
+            <div *ngIf="registerForm.get('number').hasError('required') && registerForm.get('number').touched" 
+            class="invalid-feedback">
+              Number is required
+            </div>
+            <div *ngIf="registerForm.get('number').hasError('maxlength') && registerForm.get('number').touched"
+             class="invalid-feedback">
+              Name must contain a maximum of 10 characters
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="form-group col-md-4">
+            <label>Neighborhood</label>
+            <input type="text" 
+             class="form-control"
+             [ngClass]="{'is-invalid': registerForm.get('neighborhood').errors && registerForm.get('neighborhood').touched}"
+             formControlName="neighborhood"
+             placeholder="Insert Neighborhood">
+            <div *ngIf="registerForm.get('neighborhood').hasError('required') && registerForm.get('neighborhood').touched" 
+            class="invalid-feedback">
+              Neighborhood is required
+            </div>
+            <div *ngIf="registerForm.get('neighborhood').hasError('maxlength') && registerForm.get('neighborhood').touched"
+             class="invalid-feedback">
+              Neighborhood must contain a maximum of 100 characters
+            </div>
+          </div>
+          <div class="form-group col-md-4">
+            <label>City</label>
+            <input type="text"
+             class="form-control"
+             [ngClass]="{'is-invalid': registerForm.get('city').errors && registerForm.get('city').touched}" 
+             formControlName="city"
+             placeholder="Insert City">
+            <div *ngIf="registerForm.get('neighborhood').hasError('required') && registerForm.get('city').touched" 
+            class="invalid-feedback">
+              City is required
+            </div>
+            <div *ngIf="registerForm.get('neighborhood').hasError('maxlength') && registerForm.get('city').touched"
+            class="invalid-feedback">
+              City must contain a maximum of 100 characters
+            </div>
+          </div>
+      
+          <div class="form-group col-md-4">
+            <label>AlphaCode</label>
+            <input type="text" class="form-control" 
+             [ngClass]="{'is-invalid': registerForm.get('alphaCode').errors && registerForm.get('alphaCode').touched}"
+             formControlName="alphaCode"
+             placeholder="Insert AlphaCode">
+            <div class="invalid-feedback">
+              AlphaCode is required
+            </div>
+          </div>    
+        </div> 
+        
+          <div class="form-group row">
+            <div class="form-group col-md-4">
+              <label>Phone 1</label>
+              <input type="text" 
+               class="form-control"
+               [ngClass]="{'is-invalid': registerForm.get('phoneNumber1').errors && registerForm.get('phoneNumber1').touched}"
+               formControlName="phoneNumber1"
+               placeholder="Insert Phone 1">
+              <div class="invalid-feedback">
+                PhoneNumber1 is required
+              </div>
+            </div>
+        
+            <div class="form-group col-md-4">
+              <label>Phone 2</label>
+              <input type="text" 
+               class="form-control" 
+               [ngClass]="{'is-invalid': registerForm.get('phoneNumber2').errors && registerForm.get('phoneNumber2').touched}"
+               formControlName="phoneNumber2"
+               placeholder="Insert Phone 2">
+              <div class="invalid-feedback">
+                Phone 2 is required
+              </div>
+            </div>
+          </div>   
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="template.hide()">
+          Close
+        </button>
+        <button class="btn btn-primary" [disabled]="!registerForm.valid" (click)="salvarAlteracao()">
+          Salve
+        </button>
+      </div>
+     </div>
   </div>
-  <div class="modal-body">
-    This is a modal.
-  </div>
- </ng-template>
+</div>
 
- <form [formGroup] = "registerForm">
-  <div class="form-row">
+ 
 
-    <div class="form-group col-md-12">
-      <label>Name</label>
-      <input type="text"
-      class="form-control"
-      [ngClass]="{'is-invalid': registerForm.get('name').errors && registerForm.get('name').touched}"  
-      formControlName="name"> 
-      <div *ngIf="registerForm.get('name').hasError('required') && registerForm.get('name').touched"
-      class="invalid-feedback">
-        Name is required
-      </div>
-      <div *ngIf="registerForm.get('name').hasError('minlength') && registerForm.get('name').touched" 
-      class="invalid-feedback">
-        Name must contain at least 3 characters
-      </div>
-      <div *ngIf="registerForm.get('name').hasError('maxlength') && registerForm.get('name').touched" 
-      class="invalid-feedback">
-        Name must contain a maximum of 150 characters
-      </div>
-    </div>
 
-    <div class="form-group col-md-12">
-      <label>BirthDate</label>
-      <input type="text"
-       class="form-control" 
-       [ngClass]="{'is-invalid': registerForm.get('birthDate').errors && registerForm.get('birthDate').touched}"
-       formControlName="birthDate">
-      <div class="invalid-feedback">
-        BirthDate is required
-      </div>
-    </div>
-  </div>  
-
-  <div class="form-row">
-    <div class="form-group col-md-8">
-      <label>PhoneNumber1</label>
-      <input type="text" 
-       class="form-control"
-       [ngClass]="{'is-invalid': registerForm.get('phoneNumber1').errors && registerForm.get('phoneNumber1').touched}"
-       formControlName="phoneNumber1">
-      <div class="invalid-feedback">
-        PhoneNumber1 is required
-      </div>
-    </div>
-
-    <div class="form-group col-md-4">
-      <label>PhoneNumber2</label>
-      <input type="text" 
-       class="form-control" 
-       [ngClass]="{'is-invalid': registerForm.get('phoneNumber2').errors && registerForm.get('phoneNumber2').touched}"
-       formControlName="phoneNumber2">
-      <div class="invalid-feedback">
-        PhoneNumber2 is required
-      </div>
-    </div>
-    
-    <div class="form-group col-md-3">
-      <label>E-mail</label>
-      <input type="text" 
-       class="form-control" 
-       [ngClass]="{'is-invalid': registerForm.get('email').errors && registerForm.get('email').touched}" 
-       formControlName="email">
-      <div *ngIf="registerForm.get('email').hasError('required') && registerForm.get('email').touched" 
-      class="invalid-feedback">
-        E-mail is required
-      </div>
-      <div *ngIf="registerForm.get('email').hasError('email') && registerForm.get('email').touched"
-      class="invalid-feedback">
-        E-mail is not valid
-      </div>
-    </div>   
-  </div>   
-
-  <div class="form-row">
-    <div class="form-group col-md-9">
-      <label>Adress</label>
-      <input type="text" 
-       class="form-control"
-       [ngClass]="{'is-invalid': registerForm.get('adress').errors && registerForm.get('adress').touched}"
-       formControlName="adress">
-      <div class="invalid-feedback">
-        Adress is required
-      </div>
-    </div>
-
-    <div class="form-group col-md-8">
-      <label>Number</label>
-      <input type="text" 
-       class="form-control"
-       [ngClass]="{'is-invalid': registerForm.get('number').errors && registerForm.get('number').touched}" 
-       formControlName="number">
-      <div *ngIf="registerForm.get('number').hasError('required') && registerForm.get('number').touched" 
-      class="invalid-feedback">
-        Number is required
-      </div>
-      <div *ngIf="registerForm.get('number').hasError('maxlength') && registerForm.get('number').touched"
-       class="invalid-feedback">
-        Name must contain a maximum of 10 characters
-      </div>
-    </div>
-
-    <div class="form-group col-md-4">
-      <label>Neighborhood</label>
-      <input type="text" 
-       class="form-control"
-       [ngClass]="{'is-invalid': registerForm.get('neighborhood').errors && registerForm.get('neighborhood').touched}"
-       formControlName="neighborhood">
-      <div *ngIf="registerForm.get('neighborhood').hasError('required') && registerForm.get('neighborhood').touched" 
-      class="invalid-feedback">
-        Neighborhood is required
-      </div>
-      <div *ngIf="registerForm.get('neighborhood').hasError('maxlength') && registerForm.get('neighborhood').touched"
-       class="invalid-feedback">
-        Neighborhood must contain a maximum of 100 characters
-      </div>
-    </div>
-  </div> 
-
-  <div class="form-row">
-    <div class="form-group col-md-8">
-      <label>City</label>
-      <input type="text"
-       class="form-control"
-       [ngClass]="{'is-invalid': registerForm.get('city').errors && registerForm.get('city').touched}" 
-       formControlName="city">
-      <div *ngIf="registerForm.get('neighborhood').hasError('required') && registerForm.get('city').touched" 
-      class="invalid-feedback">
-        City is required
-      </div>
-      <div *ngIf="registerForm.get('neighborhood').hasError('maxlength') && registerForm.get('city').touched"
-      class="invalid-feedback">
-        City must contain a maximum of 100 characters
-      </div>
-    </div>
-
-    <div class="form-group col-md-4">
-      <label>AlphaCode</label>
-      <input type="text" class="form-control" 
-       [ngClass]="{'is-invalid': registerForm.get('alphaCode').errors && registerForm.get('alphaCode').touched}"
-       formControlName="alphaCode">
-      <div class="invalid-feedback">
-        AlphaCode is required
-      </div>
-    </div>    
-  </div> 
-</form>
-<br>
-<button class="btn btn-secondary" (click)="openModal(template)">
-  Fechar
-</button>
-<button class="btn btn-primary" (click)="salvarAlteracao()">
-  Salvar Alterações
-</button>
-<br>
-<br>
 

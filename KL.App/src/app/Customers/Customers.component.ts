@@ -1,8 +1,12 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Customers } from '../_models/Customers';
 import { CustomersService } from '../_services/Customers.service';
+import { BsLocaleService } from 'ngx-bootstrap/datepicker';
+import { defineLocale } from 'ngx-bootstrap/chronos';
+import { ptBrLocale } from 'ngx-bootstrap/locale';
+defineLocale('pt-br', ptBrLocale);
 
 @Component({
   selector: 'app-Customer',
@@ -13,7 +17,6 @@ export class CustomersComponent implements OnInit {
 
   CustomersFiltered: Customers[] = [];
   Customers: Customers[] = [];
-  modalRef: BsModalRef;
   registerForm: FormGroup;
 
   _filtered: string = '';
@@ -28,8 +31,12 @@ export class CustomersComponent implements OnInit {
   constructor(
     private CustomersService: CustomersService
    ,private modalService: BsModalService
+   ,private fb: FormBuilder
+   ,private localService: BsLocaleService
    ) { 
-    this.modalRef = new BsModalRef();    
+     
+    this.localService.use('pt-br');  
+
     this.registerForm = new FormGroup({
       name: new FormControl('', 
         [Validators.required, Validators.minLength(3), Validators.maxLength(150)]),
@@ -54,12 +61,12 @@ export class CustomersComponent implements OnInit {
     this.getCustomers();
   }
 
-  openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template);
+  openModal(template: any) {
+    template.show();
   }
 
   validation() {
-    this.registerForm = new FormGroup({
+   /*  this.registerForm = new FormGroup({
       name: new FormControl('', 
         [Validators.required, Validators.minLength(3), Validators.maxLength(150)]),
       birthDate: new FormControl('', Validators.required),
@@ -74,6 +81,20 @@ export class CustomersComponent implements OnInit {
         [Validators.required, Validators.maxLength(100)]),
       city: new FormControl('', Validators.required),
       alphaCode: new FormControl('', Validators.required)
+    }); */
+
+    // With FormBuilder
+    this.registerForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(150)]],
+      birthDate: ['', Validators.required],
+      phoneNumber1: ['', Validators.required],
+      phoneNumber2: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      adress: ['', Validators.required],
+      number: ['',[Validators.required, Validators.maxLength(10)]],
+      neighborhood: ['',[Validators.required, Validators.maxLength(100)]],
+      city: ['', Validators.required],
+      alphaCode: ['', Validators.required]
     });
   }
 
