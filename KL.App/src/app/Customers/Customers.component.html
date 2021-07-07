@@ -5,7 +5,7 @@
   </div> 
 </div>
 <div style="margin-left: 1030px;">
-  <button class="btn btn-outline-primary" (click)="openModal(template)">
+  <button class="btn btn-outline-primary" (click)="newCustomer(template)">
     <i class="fa fa-plus-circle"></i>
     New</button>
 </div>
@@ -26,7 +26,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor = "let customer of CustomersFiltered">
+      <tr *ngFor = "let customer of customersFiltered">
         <td>{{customer.id}}</td>
         <td>{{customer.name}}</td>
         <td>{{customer.email}}</td>
@@ -37,10 +37,10 @@
         <td>{{customer.city}}</td>         
         <td>
           <div class="btn-group">
-            <button class="btn btn-sm btn-primary" tooltip="Editar" (click)="openModal(template)">
+            <button class="btn btn-sm btn-primary" tooltip="Editar" (click)="editCustomer(customer, template)">
               <i class="fa fa-edit"></i>
             </button>
-            <button class="btn btn-sm btn-danger" tooltip="Excluir">
+            <button class="btn btn-sm btn-danger" tooltip="Excluir" (click)="delCustomer(customer, confirm)">
               <i class="fa fa-eraser"></i>
             </button>
           </div> 
@@ -98,8 +98,7 @@
                class="form-control"       
                bsDatepicker
                [ngClass]="{'is-invalid': registerForm.get('birthDate').errors && registerForm.get('birthDate').touched}"
-               formControlName="birthDate"
-               placeholder="Insert BirthDate">
+               formControlName="birthDate">
               <div class="invalid-feedback">
                 BirthDate is required
               </div>
@@ -112,8 +111,7 @@
             <input type="text" 
              class="form-control" 
              [ngClass]="{'is-invalid': registerForm.get('email').errors && registerForm.get('email').touched}" 
-             formControlName="email"
-             placeholder="Insert E-mail">
+             formControlName="email">
             <div *ngIf="registerForm.get('email').hasError('required') && registerForm.get('email').touched" 
             class="invalid-feedback">
               E-mail is required
@@ -131,8 +129,7 @@
             <input type="text" 
              class="form-control"
              [ngClass]="{'is-invalid': registerForm.get('adress').errors && registerForm.get('adress').touched}"
-             formControlName="adress"
-             placeholder="Insert Adress">
+             formControlName="adress">
             <div class="invalid-feedback">
               Adress is required
             </div>
@@ -143,8 +140,7 @@
             <input type="text" 
              class="form-control"
              [ngClass]="{'is-invalid': registerForm.get('number').errors && registerForm.get('number').touched}" 
-             formControlName="number"
-             placeholder="Insert Number">
+             formControlName="number">
             <div *ngIf="registerForm.get('number').hasError('required') && registerForm.get('number').touched" 
             class="invalid-feedback">
               Number is required
@@ -162,8 +158,7 @@
             <input type="text" 
              class="form-control"
              [ngClass]="{'is-invalid': registerForm.get('neighborhood').errors && registerForm.get('neighborhood').touched}"
-             formControlName="neighborhood"
-             placeholder="Insert Neighborhood">
+             formControlName="neighborhood">
             <div *ngIf="registerForm.get('neighborhood').hasError('required') && registerForm.get('neighborhood').touched" 
             class="invalid-feedback">
               Neighborhood is required
@@ -178,8 +173,7 @@
             <input type="text"
              class="form-control"
              [ngClass]="{'is-invalid': registerForm.get('city').errors && registerForm.get('city').touched}" 
-             formControlName="city"
-             placeholder="Insert City">
+             formControlName="city">
             <div *ngIf="registerForm.get('neighborhood').hasError('required') && registerForm.get('city').touched" 
             class="invalid-feedback">
               City is required
@@ -194,8 +188,7 @@
             <label>AlphaCode</label>
             <input type="text" class="form-control" 
              [ngClass]="{'is-invalid': registerForm.get('alphaCode').errors && registerForm.get('alphaCode').touched}"
-             formControlName="alphaCode"
-             placeholder="Insert AlphaCode">
+             formControlName="alphaCode">
             <div class="invalid-feedback">
               AlphaCode is required
             </div>
@@ -208,8 +201,7 @@
               <input type="text" 
                class="form-control"
                [ngClass]="{'is-invalid': registerForm.get('phoneNumber1').errors && registerForm.get('phoneNumber1').touched}"
-               formControlName="phoneNumber1"
-               placeholder="Insert Phone 1">
+               formControlName="phoneNumber1">
               <div class="invalid-feedback">
                 PhoneNumber1 is required
               </div>
@@ -220,8 +212,7 @@
               <input type="text" 
                class="form-control" 
                [ngClass]="{'is-invalid': registerForm.get('phoneNumber2').errors && registerForm.get('phoneNumber2').touched}"
-               formControlName="phoneNumber2"
-               placeholder="Insert Phone 2">
+               formControlName="phoneNumber2">
               <div class="invalid-feedback">
                 Phone 2 is required
               </div>
@@ -233,7 +224,7 @@
         <button class="btn btn-secondary" (click)="template.hide()">
           Close
         </button>
-        <button class="btn btn-primary" [disabled]="!registerForm.valid" (click)="salvarAlteracao()">
+        <button class="btn btn-primary" [disabled]="!registerForm.valid" (click)="salvarAlteracao(template)">
           Salve
         </button>
       </div>
@@ -241,7 +232,31 @@
   </div>
 </div>
 
- 
+<div bsModal #confirm="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+	<div class="modal-dialog modal-sm">
+  		<div class="modal-content">
+    		<div class="modal-header">
+      			<h4 class="modal-title pull-left">
+        			Deleting Customer
+      			</h4>
+      			<button type="button" class="close pull-right" (click)="confirm.hide()" aria-label="Close">
+        			<span aria-hidden="true">&times;</span>
+      			</button>
+    		</div>
+    		<div class="modal-body">
+      			<p>{{bodyDeleteCustomer}}</p>
+    		</div>    
+    		<div class="modal-footer btn-group d-flex">      
+      			<button type="button" class="btn btn-outline-primary" (click)="confirm.hide()">
+        			CANCEL
+      			</button>
+      			<button type="button" class="btn btn-outline-danger" (click)="confirmDelete(confirm)">
+          		CONFIRM
+        		</button>
+    		</div>
+  		</div>
+	</div>
+</div>
 
 
 

@@ -1,23 +1,28 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BsModalService } from 'ngx-bootstrap/modal';
 import { Customers } from '../_models/Customers';
 import { CustomersService } from '../_services/Customers.service';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
+import { DateTimeFormatPipe } from '../_helpers/DateTimeFormat.pipe';
 defineLocale('pt-br', ptBrLocale);
 
 @Component({
   selector: 'app-Customer',
   templateUrl: './Customers.component.html',
-  styleUrls: ['./Customers.component.css']
+  styleUrls: ['./Customers.component.css'],
+  providers: [DateTimeFormatPipe]
 })
 export class CustomersComponent implements OnInit {
 
-  CustomersFiltered: Customers[] = [];
-  Customers: Customers[] = [];
+  customersFiltered: Customers[] = [];
+  customers: Customers[] = [];
+  customer: Customers;
   registerForm: FormGroup;
+  saveMode = 'post';
+  bodyDeleteCustomer = '';
 
   _filtered: string = '';
   get filtered() {
@@ -25,7 +30,7 @@ export class CustomersComponent implements OnInit {
   }
   set filtered(value: string) {
     this._filtered = value;
-    this.CustomersFiltered = this.filtered ? this.toFilterCustomers(this.filtered) : this.Customers;
+    this.customersFiltered = this.filtered ? this.toFilterCustomers(this.filtered) : this.customers;
   }
 
   constructor(
@@ -33,27 +38,9 @@ export class CustomersComponent implements OnInit {
    ,private modalService: BsModalService
    ,private fb: FormBuilder
    ,private localService: BsLocaleService
+   ,private datePipe: DateTimeFormatPipe
    ) { 
-     
-    this.localService.use('pt-br');  
-
-    this.registerForm = new FormGroup({
-      name: new FormControl('', 
-        [Validators.required, Validators.minLength(3), Validators.maxLength(150)]),
-      birthDate: new FormControl('', Validators.required),
-      phoneNumber1: new FormControl('', Validators.required),
-      phoneNumber2: new FormControl('', Validators.required),
-      email: new FormControl('', 
-        [Validators.required, Validators.email]),
-      adress: new FormControl('', Validators.required),
-      number: new FormControl('', 
-        [Validators.required, Validators.maxLength(10)]),
-      neighborhood: new FormControl('', 
-        [Validators.required, Validators.maxLength(100)]),
-      city: new FormControl('', 
-        [Validators.required, Validators.maxLength(100)]),
-      alphaCode: new FormControl('', Validators.required)
-    });
+    this.localService.use('pt-br');     
   } 
 
   ngOnInit() {
@@ -61,32 +48,49 @@ export class CustomersComponent implements OnInit {
     this.getCustomers();
   }
 
+  editCustomer(customer: Customers, template: any) {
+    this.saveMode = 'put';
+    this.openModal(template);
+    this.customer = customer;
+    this.registerForm.patchValue(customer);
+  }
+
+  newCustomer(template: any) {
+    this.saveMode = 'post';
+    this.openModal(template);
+  }
+
+  delCustomer(customer: Customers, template: any) {
+    this.openModal(template);
+    this.customer = customer;
+    this.bodyDeleteCustomer = `Are you sure you want to delete the customer: ${customer.name}, Id: ${customer.id}`;
+  }
+
+  confirmDelete(template: any) {
+    this.CustomersService.deleteCustomer(this.customer.id).subscribe(
+      () => {
+          template.hide();
+          this.getCustomers();
+        }, error => {
+          console.log(error);
+        }
+    );
+  }
+
   openModal(template: any) {
+    //Open modal and first reset form  
+    this.registerForm.reset();   
     template.show();
   }
 
-  validation() {
-   /*  this.registerForm = new FormGroup({
-      name: new FormControl('', 
-        [Validators.required, Validators.minLength(3), Validators.maxLength(150)]),
-      birthDate: new FormControl('', Validators.required),
-      phoneNumber1: new FormControl('', Validators.required),
-      phoneNumber2: new FormControl('', Validators.required),
-      email: new FormControl('', 
-        [Validators.required, Validators.email]),
-      adress: new FormControl('', Validators.required),
-      number: new FormControl('', 
-        [Validators.required, Validators.maxLength(10)]),
-      neighborhood: new FormControl('', 
-        [Validators.required, Validators.maxLength(100)]),
-      city: new FormControl('', Validators.required),
-      alphaCode: new FormControl('', Validators.required)
-    }); */
 
+  validation() {
     // With FormBuilder
-    this.registerForm = this.fb.group({
+    this.registerForm = this.fb.group({     
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(150)]],
       birthDate: ['', Validators.required],
+      codArea1: [''],
+      codArea2: [''],
       phoneNumber1: ['', Validators.required],
       phoneNumber2: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -94,17 +98,56 @@ export class CustomersComponent implements OnInit {
       number: ['',[Validators.required, Validators.maxLength(10)]],
       neighborhood: ['',[Validators.required, Validators.maxLength(100)]],
       city: ['', Validators.required],
-      alphaCode: ['', Validators.required]
+      alphaCode: ['', Validators.required]     
     });
   }
 
-  salvarAlteracao() {
+  salvarAlteracao(template: any) {
+    if (this.registerForm.valid) {
+      //Copy content form to object    
+     
+      if (this.saveMode === 'post') {
+        this.customer = Object.assign({}, this.registerForm.value);
+        this.customer.phoneNumber1 = Number(this.customer.phoneNumber1);
+        this.customer.phoneNumber2 = Number(this.customer.phoneNumber2);
+        this.customer.codArea1 = 71;
+        this.customer.codArea2 = 71;
+        this.customer.updateDate = new Date();
 
+        this.CustomersService.postCustomer(this.customer).subscribe(
+          (newCustormer: Customers) => {
+            console.log(newCustormer);
+            template.hide();
+            this.getCustomers();
+          }, error => {
+            console.log(error);
+          }
+        )
+      } else {
+        // Keeping the id of object setted in the method editCustomer
+        this.customer = Object.assign({id: this.customer.id}, this.registerForm.value);
+        this.customer.phoneNumber1 = Number(this.customer.phoneNumber1);
+        this.customer.phoneNumber2 = Number(this.customer.phoneNumber2);
+        this.customer.codArea1 = 71;
+        this.customer.codArea2 = 71;
+        this.customer.updateDate = new Date(); 
+
+        this.CustomersService.putCustomer(this.customer).subscribe(
+          (newCustormer: Customers) => {
+            console.log(newCustormer);
+            template.hide();
+            this.getCustomers();
+          }, error => {
+            console.log(error);
+          }
+        )
+      }      
+    }
   }
 
   toFilterCustomers(filterBy: string): any {
     filterBy = filterBy.toLocaleLowerCase();
-    return this.Customers.filter(
+    return this.customers.filter(
       client => client.name.toLocaleLowerCase().indexOf(filterBy) !== -1
     );
   }
@@ -112,9 +155,19 @@ export class CustomersComponent implements OnInit {
   getCustomers() {
     this.CustomersService.getAllCustomers().subscribe(
       (_Customers: Customers[]) => {
-        this.Customers = _Customers;
-        this.CustomersFiltered = this.Customers;
+        this.customers = _Customers;
+        this.customersFiltered = this.customers;
     }, error => {
+      console.log(error);
+    });
+  }
+
+  getCustomersById(id: number) {
+    this.CustomersService.getCustomerById(id).subscribe(
+      (_Customer: Customers) => {
+        debugger;
+        this.registerForm.setValue(_Customer);
+       }, error => {
       console.log(error);
     });
   }

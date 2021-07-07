@@ -15,12 +15,24 @@ export class CustomersService {
     return this.http.get<Customers[]>(this.baseUrl);
   }
 
-  public getClientByName(name : string) : Observable<Customers> {
+  public getCustomerByName(name : string) : Observable<Customers> {
     // url using template string
     return this.http.get<Customers>(`${this.baseUrl}/getByName/${name}`);
   }
 
-  public getClientById(id : number) : Observable<Customers> {
-    return this.http.get<Customers>(`${this.baseUrl}/${id}`);
+  public getCustomerById(CustomersId : number) : Observable<Customers> {
+    return this.http.get<Customers>(`${this.baseUrl}/${CustomersId}`);
+  }
+
+  public postCustomer(customer: Customers){
+    return this.http.post<Customers>(this.baseUrl, customer);
+  }
+
+  public putCustomer(customer: Customers){
+    return this.http.put<Customers>(`${this.baseUrl}/${customer.id}`, customer);
+  }
+
+  public deleteCustomer(id: number){
+    return this.http.delete<Customers>(`${this.baseUrl}/${id}`);
   }
 }

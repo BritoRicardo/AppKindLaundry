@@ -77,21 +77,22 @@ namespace KL.WebAPI.Controllers
                 return Created($"/api/customers/{model.Id}", model);
             }
         }
-        catch (System.Exception)
-        {            
+        catch (System.Exception ex)
+        {     
+            var temp = ex.Message;       
             return this.StatusCode(StatusCodes.Status500InternalServerError, "Ops! Algo ocorreu errado!");
         }
         //If no Exception and no Saved
         return BadRequest();
     }  
 
-    [HttpPut]
-    public async Task<IActionResult> Put(int ClientId, Customers model)
+    [HttpPut ("{Id}")]
+    public async Task<IActionResult> Put(int Id, Customers model)
     {
         try
         {
             //Get Client no joins (Without relationship tables)
-            var client = await _repo.GetClientById(ClientId, false);
+            var client = await _repo.GetClientById(Id, false);
 
             if (client == null) return NotFound(); 
 
@@ -111,13 +112,13 @@ namespace KL.WebAPI.Controllers
         return BadRequest();
     }
 
-     [HttpDelete]
-    public async Task<IActionResult> Delete(int ClientId)
+     [HttpDelete ("{Id}")]
+    public async Task<IActionResult> Delete(int Id)
     {
         try
         {
             //Get Client no joins (Without relationship tables)
-            var client = await _repo.GetClientById(ClientId, false);
+            var client = await _repo.GetClientById(Id, false);
 
             if (client == null) return NotFound(); 
 
